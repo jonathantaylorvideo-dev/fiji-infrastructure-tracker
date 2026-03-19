@@ -1,68 +1,36 @@
-# fiji-infrastructure-tracker
------
+# 🇫🇯 Fiji Infrastructure Voice-to-GIS Tracker
+### **Project Status: Version 1.2 (Active Field Pilot)**
+**Target Agency:** Ministry of Rural and Maritime Development, Fiji  
+**Live Demo:** [Insert Your Streamlit URL Here]
 
-# 🇫🇯 Fiji Infrastructure Command Center
+## 📋 Executive Summary
+This application is a **Voice-First AI Pipeline** designed to solve data-entry bottlenecks in remote maritime regions. This solution allows agents to submit **natural language voice reports**. The system uses a multimodal AI engine to parse audio into structured geospatial data, providing national-level oversight via a real-time GIS dashboard.
 
-### **Voice-to-GIS Field Reporting System**
+## 🚀 Phase 1: Active Field Pilots (Current)
+The following projects are currently live in the tracking database:
+1.  **Lau Group Solar Array** (Eastern) — *Successfully handled 180° Longitude Logic*
+2.  **Suva Port Expansion** (Central) — *Urban Infrastructure baseline*
 
-[](https://share.streamlit.io/)
-[](https://ai.google.dev/)
-[](https://supabase.com/)
+## 🏗️ Phase 2: National Expansion (Planned)
+The following projects are identified as the next priority for the voice-to-data rollout:
+1.  **Koro Island Water Catchment** (Lomaiviti)
+2.  **Taveuni Agricultural Hub** (Northern)
+3.  **Vanua Levu Roadworks** (Northern)
 
-## 📖 Overview
+## 🛠️ Technical Stack
+* **Language:** Python 3.10+
+* **Framework:** Streamlit
+* **AI/LLM:** Google Gemini API (Multimodal Audio Parsing)
+* **Database:** Supabase (PostgreSQL)
+* **Mapping:** Folium & Esri Satellite Imagery
 
-The **Fiji Infrastructure Command Center** is a multimodal AI agent designed to bridge the gap between remote field workers and central government planning. In many maritime environments like the Fiji Islands, manual data entry is slow and error-prone.
+---
 
-This system allows field engineers to record **voice updates**, which are then synthesized by **Gemini 2.5 Flash**, validated against an official project registry, and plotted instantly onto a **Satellite GIS Dashboard**.
+## 🛰️ Strategic Roadmap
+For detailed technical specifications on the **Audit Queue**, **Automated Procurement**, and **Supply Chain Routing**, please refer to the **[PHASE_2.md](./PHASE_2.md)** file.
 
-## 🚀 Key Features
-
-  * **Voice-First Interface:** Uses `st.audio_input` to capture field reports, reducing administrative overhead for engineers in the field.
-  * **AI Synthesis:** Leverages Gemini 2.5 Flash to extract structured JSON data (Project Name, Completion %, Transcript) from raw audio.
-  * **Geospatial Intelligence:** Interactive Folium-based map with **Satellite/Road view switching** and color-coded "Health Bubbles" (Red: At Risk, Orange: Active, Cyan: Complete).
-  * **Real-time Persistence:** Powered by a Supabase backend for instant synchronization across all Ministry stakeholders.
-  * **Vibe Coding Architecture:** Built using high-automation tools for rapid prototyping and deployment.
-
-## 🛠️ Tech Stack
-
-  * **Frontend:** [Streamlit](https://streamlit.io/)
-  * **AI/LLM:** [Google Gemini 2.5 Flash](https://ai.google.dev/) (Multimodal Audio-to-JSON)
-  * **Database:** [Supabase](https://supabase.com/) (PostgreSQL with Service Role security)
-  * **Mapping:** [Folium](https://python-visualization.github.io/folium/) & [Esri World Imagery](https://www.esri.com/)
-  * **Language:** Python 3.11+
-
-## 📥 Installation & Setup
-
-1.  **Clone the repository:**
-
-    ```bash
-    git clone https://github.com/your-username/fiji-infrastructure-tracker.git
-    cd fiji-infrastructure-tracker
-    ```
-
-2.  **Install dependencies:**
-
-    ```bash
-    pip install streamlit pandas requests supabase streamlit-folium folium
-    ```
-
-3.  **Configure Environment:**
-    Ensure your `SUPABASE_KEY` and `GEMINI_KEY` are correctly placed in the `app.py` or managed via Streamlit Secrets.
-
-4.  **Run the App:**
-
-    ```bash
-    streamlit run app.py
-    ```
-
-## 📋 Data Schema (Supabase)
-
-To replicate this project, create a table named `reports` with the following columns:
-
-  * `id`: int8 (Primary Key)
-  * `created_at`: timestamptz (Default: now())
-  * `project_name`: text
-  * `status_percent`: int4
-  * `original_transcript`: text
-
------
+**Upcoming Technical Milestones:**
+* **Automated Procurement:** Voice-triggered supply requests routed to logistics agents after audit.
+* **Supervisor Audit Queue:** A "Human-in-the-Loop" verification gateway for all field data.
+* **Role-Based Security:** Secure login for Ministry Officials and Field Agents via Supabase Auth.
+* **Offline Mode:** Edge-caching of audio reports for "Zero-Signal" zones in the Outer Islands.
