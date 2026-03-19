@@ -40,28 +40,61 @@ map_choice = st.sidebar.radio(
 )
 
 # --- 3. THE DASHBOARD & FOLIUM MAP ---
-# (Inside your try block, update the drawing loop)
+st.title("🇫🇯 Fiji Infrastructure Command Center")
+col_map, col_progress = st.columns([2, 1])
 
-for proj, coords in PROJECT_LOCATIONS.items():
-    # Look for the project in our database results
-    # We use 'df' if it exists, otherwise an empty dataframe
-    row = df[df['project_name'] == proj] if 'df' in locals() and not df.empty else pd.DataFrame()
+# A. Initialize the Map Variable FIRST so it always exists
+tiles = 'OpenStreetMap' if map_choice == "Standard Road" else 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
+attr = 'Esri' if map_choice == "Satellite Terrain" else 'OpenStreetMap'
+
+# Center the map to catch the Lau Group (179.0 is the sweet spot)
+m = folium.Map(location=[-18.0, 179.0], zoom_start=6, tiles=tiles, attr=attr)
+
+# B. Try to get Data from Supabase
+try:
+    res = db.table("reports").select("*").order("created_at", desc=True).execute()
+    df = pd.DataFrame(res.data) if res.data else pd.DataFrame()
+except Exception as e:
+    st.error(f"Database Connection Error: {e}")
+    df = pd.DataFrame() # Fallback to empty so the map still draws
+
+# C. Draw the Dots (The "5-Dot Guarantee")
+with col_map:
+    st.subheader(f"🌐 Geographic Status: {map_choice}")
     
-    # Use the last entry's percent, or 0 if never reported
-    pct = int(row.iloc[-1]['status_percent']) if not row.empty else 0
-    
-    # Logic: Draw the dot NO MATTER WHAT
-    color = "gray" if pct == 0 else "red" if pct < 30 else "orange" if pct < 80 else "blue"
-    
-    folium.CircleMarker(
-        location=[coords["lat"], coords["lon"]],
-        radius=(pct / 5) + 8, # Minimum size of 8 so we can see 0% projects
-        popup=f"{proj}: {pct}%",
-        color=color,
-        fill=True,
-        fill_color=color,
-        fill_opacity=0.6
-    ).add_to(m)
+    for proj, coords in PROJECT_LOCATIONS.items():
+        # Look for the latest update for this specific project
+        if not df.empty and proj in df['project_name'].values:
+            proj_row = df[df['project_name'] == proj].iloc[0]
+            pct = int(proj_row['status_percent'])
+        else:
+            pct = 0 # Default if no data exists yet
+        
+        # Color logic
+        color = "gray" if pct == 0 else "red" if pct < 30 else "orange" if pct < 80 else "blue"
+        
+        folium.CircleMarker(
+            location=[coords["lat"], coords["lon"]],
+            radius=(pct / 5) + 10, # Minimum size 10 so it's clickable
+            popup=f"{proj}: {pct}%",
+            color=color,
+            fill=True,
+            fill_color=color,
+            fill_opacity=0.6
+        ).add_to(m)
+
+    # Render the map
+    st_folium(m, width=700, height=500, key=f"fiji_map_{len(df)}")
+
+with col_progress:
+    st.subheader("📊 Completion Status")
+    for project in OFFICIAL_PROJECT_REGISTRY:
+        if not df.empty and project in df['project_name'].values:
+            val = int(df[df['project_name'] == project].iloc[0]['status_percent'])
+        else:
+            val = 0
+        st.write(f"**{project}**")
+        st.progress(val / 100, text=f"{val}%")
     
 # --- 4. VOICE UPLINK & AI PROCESSING ---
 st.subheader("🎙️ Send Field Update")
