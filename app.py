@@ -24,7 +24,7 @@ OFFICIAL_PROJECT_REGISTRY = ["Koro Island Water Catchment", "Lau Group Solar Arr
 
 PROJECT_LOCATIONS = {
     "Koro Island Water Catchment": {"lat": -17.3106, "lon": 179.4067},
-    "Lau Group Solar Array": {"lat": -18.2000, "lon": -178.8000},
+    "Lau Group Solar Array": {"lat": -18.2000, "lon": -178.8000}, # Change to -178.8
     "Taveuni Agricultural Hub": {"lat": -16.8286, "lon": 179.9441},
     "Vanua Levu Roadworks": {"lat": -16.5917, "lon": 179.1833},
     "Suva Port Expansion": {"lat": -18.1416, "lon": 178.4419}
