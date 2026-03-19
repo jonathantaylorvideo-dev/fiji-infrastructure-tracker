@@ -1,0 +1,51 @@
+
+---
+
+# 🚀 Phase 2 Strategic Roadmap: National Scale-Up
+**Project:** Fiji Infrastructure Voice-to-GIS Pipeline  
+**Target Agency:** Ministry of Rural and Maritime Development  
+**Lead Architect:** [Your Name]
+
+## 📋 Overview
+Phase 1 successfully established the **Voice-to-Data** proof of concept, resolving critical geospatial mapping challenges at the 180° meridian. Phase 2 transitions the platform from a monitoring tool into a **National Workflow & Logistics Engine**.
+
+---
+
+## 🛡️ 1. Data Governance & Audit Workflow
+To ensure "One Version of Truth" for government reporting, we are moving to a **Human-in-the-Loop (HITL)** verification model.
+* **The Audit Queue:** Incoming voice updates are flagged as `PENDING`. 
+* **Supervisor Review:** Ministry officials utilize a secure dashboard to compare the **Original Audio Transcript** against the **AI-extracted Data**.
+* **Verification:** Only "Approved" reports update the public-facing National Map and completion percentages.
+* **Immutable Audit Trail:** Every status change is logged in Supabase with a timestamp and the ID of the reviewing officer for donor transparency.
+
+
+
+## 📦 2. Automated Procurement & Supply Chain Routing
+This phase integrates **Resource Logistics** directly into the reporting pipeline to eliminate project stagnation caused by material shortages.
+* **Resource Extraction:** The Gemini engine is tuned to identify "Supply Requests" within field reports (e.g., "Out of Grade A cement" or "Need 12mm rebar").
+* **Automated Dispatch:** Upon Supervisor Audit, supply requests are programmatically routed to the appropriate **Procurement Agent**.
+* **Closing the Loop:** The system generates a digital "Action Item" for the agent, tracking the request from "Requested" to "Dispatched" to "Received."
+
+## 🔐 3. Enterprise Security & Access Control
+Transitioning to a multi-tenant architecture using **Supabase Auth** and **Row Level Security (RLS)**.
+* **Role-Based Access (RBAC):**
+    * **Field Agents:** Limited to viewing and updating assigned projects within their province.
+    * **Procurement Agents:** Access to the Supply Request & Logistics dashboard only.
+    * **Ministry Auditors:** Global oversight and approval authority.
+* **MFA Integration:** Mandatory Multi-Factor Authentication for all administrative accounts to protect sensitive national infrastructure data.
+
+## 📡 4. Maritime Resilience & Offline Capability
+Addressing the unique geographic constraints of the Fiji archipelago:
+* **Asynchronous Sync (Offline Mode):** Implementation of local browser storage (IndexedDB) to capture voice reports in "dead zones." Data "bursts" to the cloud automatically upon reaching 3G/4G/Starlink coverage.
+* **Multilingual Support:** Expanding NLU (Natural Language Understanding) to support **iTaukei** and **Fiji Hindi** audio inputs.
+* **Visual Verification (Vision AI):** Integration of photo-upload capabilities where Gemini Vision cross-references site photos against reported completion percentages to flag discrepancies.
+
+---
+
+## 📈 Impact Goals
+1. **Reduce Reporting Latency:** Move from weekly paper reports to real-time voice updates.
+2. **Increase Transparency:** Provide a tamper-proof digital trail for international infrastructure grants.
+3. **Optimize Logistics:** Cut procurement lead times by 40% through automated routing of material needs.
+
+---
+**Would you like me to draft the "Installation Guide" for your README so the Peace Corps IT team knows exactly how to deploy your app?**
