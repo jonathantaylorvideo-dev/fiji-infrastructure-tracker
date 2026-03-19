@@ -1,7 +1,7 @@
 # 🇫🇯 Fiji Infrastructure Voice-to-GIS Tracker
 ### **Project Status: Version 1.2 (Active Field Pilot)**
 **Target Agency:** Ministry of Rural and Maritime Development, Fiji  
-**Live Demo:** [Insert Your Streamlit URL Here]
+**Live Demo:** [https://fiji-infrastructure-tracker-dsnaph6p98uzg7nteaapmp.streamlit.app/]
 
 ## 📋 Executive Summary
 This application is a **Voice-First AI Pipeline** designed to solve data-entry bottlenecks in remote maritime regions. This solution allows agents to submit **natural language voice reports**. The system uses a multimodal AI engine to parse audio into structured geospatial data, providing national-level oversight via a real-time GIS dashboard.
