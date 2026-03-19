@@ -40,53 +40,29 @@ map_choice = st.sidebar.radio(
 )
 
 # --- 3. THE DASHBOARD & FOLIUM MAP ---
-st.title("🇫🇯 Fiji Infrastructure Command Center")
-col_map, col_progress = st.columns([2, 1])
+# (Inside your try block, update the drawing loop)
 
-try:
-    res = db.table("reports").select("*").order("created_at", desc=True).execute()
-    if res.data:
-        df = pd.DataFrame(res.data)
-        df['status_percent'] = pd.to_numeric(df['status_percent'], errors='coerce').fillna(0)
-        latest_updates = df.sort_values('created_at').groupby('project_name').tail(1)
-
-        with col_map:
-            st.subheader(f"🌐 Geographic Status: {map_choice}")
-            
-            tiles = 'OpenStreetMap' if map_choice == "Standard Road" else 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-            attr = 'Esri' if map_choice == "Satellite Terrain" else 'OpenStreetMap'
-            
-            m = folium.Map(location=[-17.7134, 178.0650], zoom_start=7, tiles=tiles, attr=attr)
-
-            for proj, coords in PROJECT_LOCATIONS.items():
-                row = latest_updates[latest_updates['project_name'] == proj]
-                pct = int(row.iloc[0]['status_percent']) if not row.empty else 0
-                color = "red" if pct < 30 else "orange" if pct < 80 else "blue"
-                
-                folium.CircleMarker(
-                    location=[coords["lat"], coords["lon"]],
-                    radius=(pct / 5) + 5,
-                    popup=f"{proj}: {pct}%",
-                    color=color,
-                    fill=True,
-                    fill_color=color,
-                    fill_opacity=0.6
-                ).add_to(m)
-
-            st_folium(m, width=700, height=500)
-            
-        with col_progress:
-            st.subheader("📊 Completion Status")
-            for project in OFFICIAL_PROJECT_REGISTRY:
-                row = latest_updates[latest_updates['project_name'] == project]
-                pct = int(row.iloc[0]['status_percent']) if not row.empty else 0
-                st.write(f"**{project}**")
-                st.progress(pct / 100, text=f"{pct}%")
-except Exception as e:
-    st.error(f"Map Rendering Error: {e}")
-
-st.divider()
-
+for proj, coords in PROJECT_LOCATIONS.items():
+    # Look for the project in our database results
+    # We use 'df' if it exists, otherwise an empty dataframe
+    row = df[df['project_name'] == proj] if 'df' in locals() and not df.empty else pd.DataFrame()
+    
+    # Use the last entry's percent, or 0 if never reported
+    pct = int(row.iloc[-1]['status_percent']) if not row.empty else 0
+    
+    # Logic: Draw the dot NO MATTER WHAT
+    color = "gray" if pct == 0 else "red" if pct < 30 else "orange" if pct < 80 else "blue"
+    
+    folium.CircleMarker(
+        location=[coords["lat"], coords["lon"]],
+        radius=(pct / 5) + 8, # Minimum size of 8 so we can see 0% projects
+        popup=f"{proj}: {pct}%",
+        color=color,
+        fill=True,
+        fill_color=color,
+        fill_opacity=0.6
+    ).add_to(m)
+    
 # --- 4. VOICE UPLINK & AI PROCESSING ---
 st.subheader("🎙️ Send Field Update")
 audio_file = st.audio_input("Record Update")
