@@ -104,10 +104,16 @@ if audio_file:
             if 'candidates' in res_json:
                 raw_text = res_json['candidates'][0]['content']['parts'][0]['text']
                 clean_json = raw_text.replace("```json", "").replace("```", "").strip()
+                
+                # 1. Insert the data
                 db.table("reports").insert(json.loads(clean_json)).execute()
-                status.update(label="✅ Data Archived!", state="complete")
+                
+                # 2. Update the UI status
+                status.update(label="✅ Satellite Sync Complete!", state="complete")
                 st.balloons()
-                st.rerun() 
+                
+                # 3. CRITICAL: Force the whole app to refresh so the Map reads the new DB row
+                st.rerun()
         except Exception as e:
             st.error(f"Uplink Error: {e}")
 
