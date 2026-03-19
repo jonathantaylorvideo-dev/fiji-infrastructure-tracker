@@ -114,6 +114,9 @@ if audio_file:
                 
                 # 3. CRITICAL: Force the whole app to refresh so the Map reads the new DB row
                 st.rerun()
+                # This tells Streamlit: "If the number of rows in my data changes, redraw this map"
+                st_folium(m, width=700, height=500, key=f"map_{len(df)}") 
+                st.rerun()
         except Exception as e:
             st.error(f"Uplink Error: {e}")
 
